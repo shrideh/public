@@ -1,359 +1,485 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الموقع الشخصي للمحامي الشرعي معتز الشريدة</title>
-    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.rtl.min.css"
-        integrity="sha512-VNBisELNHh6+nfDjsFXDA6WgXEZm8cfTEcMtfOZdx0XTRoRbr/6Eqb2BjqxF4sNFzdvGIt+WqxKgn0DSfh2kcA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-
+<html lang="ar" dir="rtl" data-bs-theme="auto">
+  <head>
+    <script src="./js/color-modes.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content=" المحامي الشرعي معتز الشريدة هو محامٍ متخصص في قضايا الأسرة في الأردن، بما في ذلك الزواج، والطلاق، والمهر، والإرث. يُقدم استشارات قانونية ويُعالج القضايا المتعلقة بالأحوال الشخصية. يُشارك في مجموعات قانونية على فيسبوك، حيث يُقدم النصائح والإرشادات للأفراد حول المسائل الشرعية. "
+    />
+    <meta
+      name="keywords"
+      content=" الأردن,الأحوال الشخصية,الطلاق،المهر،استشارات,قانونية "
+    />
+    <title>الموقع الشخصي للمحامي معتز الشريدة</title>
+    <link rel="manifest" href="manifest.json" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css"
+      integrity="sha512-rd0qOHVMOcez6pLWPVFIv7EfSdGKLt+eafXh4RO/12Fgr41hDQxfGvoi1Vy55QIVcQEujUE1LQrATCLl2Fs+ag=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+      .content {
+        padding: 20px;
+        text-align: center;
+      }
 
-        header {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-            position: relative;
-        }
+      .content h2 {
+        color: #2c3e50;
+      }
 
-        header h1 {
-            margin: 0;
-            font-size: 2.5em;
-        }
+      .content p {
+        font-size: 1.2em;
+        color: #555;
+      }
 
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            padding: 15px 0;
-            background-color: #34495e;
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.1em;
-            padding: 8px 15px;
-            transition: background 0.3s;
-        }
-
-        nav a:hover {
-            background: #2c3e50;
-            border-radius: 5px;
-        }
-
-        nav #email {
-            color: #1abc9c;
-        }
-
-        .content {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .content h2 {
-            color: #2c3e50;
-        }
-
-        .content p {
-            font-size: 1.2em;
-            color: #555;
-        }
-
-        .map {
-            margin: 20px auto;
-            width: 90%;
-            height: 500px;
-        }
-
-        footer {
-            background: linear-gradient(135deg, #34495e, #2c3e50);
-            color: #fff;
-            text-align: center;
-            padding: 20px;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-
-        footer p {
-            margin: 10px 0;
-        }
-
-        footer a {
-            color: #1abc9c;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2em;
-            }
-
-            nav {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
-
-        .swiper {
-            z-index: 0;
-            /* تأكد من أن سلايدر يكون تحت مربع البحث */
-        }
-
-        .swiper-slide {
-            display: flex;
-            cursor: pointer;
-            /* إظهار شكل المؤشر عند المرور */
-            transition: background-color 0.3s;
-            /* تأثير سلس عند التمرير */
-        }
-
-        .br_sr_name {
-            text-align: right;
-            text-wrap: wrap;
-        }
-        #sitename{
-            color: #1abc9c;
-        }
+      .map {
+        margin: 20px auto;
+        width: 90%;
+        height: 500px;
+      }
     </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const map = L.map('map').setView([31.963158, 35.930359], 2); // موقع الأردن كبداية
-
-            // إضافة طبقة الخريطة
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 18,
-            }).addTo(map);
-
-           // بيانات السفارات الأردنية
-            const embassies = [
-                { name: "سفارة الأردن في أذربيجان - باكو", coords: [40.409262, 49.867092] },
-                { name: "سفارة الأردن في أندونيسيا - جاكرتا", coords: [-6.208763, 106.845599] },
-                { name: "سفارة الأردن في أوزباكستان - طشقند", coords: [41.299496, 69.240073] },
-                { name: "سفارة الأردن في إيران - طهران", coords: [35.689198, 51.388974] },
-                { name: "سفارة الأردن في الإمارات العربية المتحدة - أبو ظبي", coords: [24.453884, 54.3773438] },
-                { name: "قنصلية الأردن في الإمارات العربية المتحدة - دبي", coords: [25.276987, 55.296249] },
-                { name: "سفارة الأردن في البحرين - المنامة", coords: [26.223504, 50.587836] },
-                { name: "قنصلية الأردن في العراق - أربيل", coords: [36.191113, 44.009167] },
-                { name: "سفارة الأردن في العراق - بغداد", coords: [33.315241, 44.366066] },
-                { name: "سفارة الأردن في الكويت - الكويت", coords: [29.375859, 47.977405] },
-                { name: "سفارة الأردن في السعودية - الرياض", coords: [24.713552, 46.675297] },
-                { name: "قنصلية الأردن في السعودية - جدة", coords: [21.485811, 39.192505] },
-                { name: "سفارة الأردن في الهند - نيودلهي", coords: [28.613939, 77.209023] },
-                { name: "سفارة الأردن في اليابان - طوكيو", coords: [35.689487, 139.691711] },
-                { name: "سفارة الأردن في اليمن - صنعاء", coords: [15.369445, 44.191007] },
-                { name: "سفارة الأردن في باكستان - إسلام آباد", coords: [33.68442, 73.047884] },
-                { name: "سفارة الأردن في تركيا - أنقرة", coords: [39.92077, 32.85411] },
-                { name: "سفارة الأردن في الصين - بكين", coords: [39.9042, 116.407396] },
-                { name: "سفارة الأردن في سنغافورة - سنغافورة", coords: [1.352083, 103.819836] },
-                { name: "سفارة الأردن في سوريا - دمشق", coords: [33.513807, 36.276528] },
-                { name: "سفارة الأردن في عُمان - مسقط", coords: [23.58589, 58.405922] },
-                { name: "سفارة الأردن في قطر - الدوحة", coords: [25.276987, 51.520008] },
-                { name: "سفارة الأردن في كازاخستان - أستانا", coords: [51.169392, 71.449074] },
-                { name: "سفارة الأردن في كوريا الجنوبية - سيؤول", coords: [37.566535, 126.977969] },
-                { name: "سفارة الأردن في لبنان - بيروت", coords: [33.893791, 35.501776] },
-                { name: "سفارة الأردن في ماليزيا - كوالالمبور", coords: [3.139003, 101.686855] },
-                { name: "سفارة الأردن في إسبانيا - مدريد", coords: [40.416775, -3.70379] },
-                { name: "سفارة الأردن في ألمانيا - برلين", coords: [52.520007, 13.404954] },
-                { name: "سفارة الأردن في إيطاليا - روما", coords: [41.902784, 12.496366] },
-                { name: "سفارة الأردن في المملكة المتحدة - لندن", coords: [51.507351, -0.127758] },
-                { name: "سفارة الأردن في النرويج - أوسلو", coords: [59.913869, 10.752245] },
-                { name: "سفارة الأردن في النمسا - فيينا", coords: [48.208174, 16.373819] },
-                { name: "سفارة الأردن في اليونان - أثينا", coords: [37.98381, 23.727539] },
-                { name: "سفارة الأردن في بلجيكا - بروكسل", coords: [50.850346, 4.351721] },
-                { name: "سفارة الأردن في روسيا - موسكو", coords: [55.755826, 37.6173] },
-                { name: "سفارة الأردن في رومانيا - بخارست", coords: [44.426767, 26.102538] },
-                { name: "سفارة الأردن في سويسرا - بيرن", coords: [46.94809, 7.44744] },
-                { name: "سفارة الأردن في فرنسا - باريس", coords: [48.856614, 2.3522219] },
-                { name: "سفارة الأردن في قبرص - نيقوسيا", coords: [35.185566, 33.382276] },
-                { name: "سفارة الأردن في هولندا - لاهاي", coords: [52.070498, 4.3007] },
-                { name: "سفارة الأردن في أثيوبيا - أديس أبابا", coords: [9.145, 40.489673] },
-                { name: "سفارة الأردن في الجزائر - الجزائر", coords: [36.737232, 3.086472] },
-                { name: "سفارة الأردن في السودان - الخرطوم", coords: [15.500654, 32.559899] },
-                { name: "سفارة الأردن في المغرب - الرباط", coords: [34.020882, -6.84165] },
-                { name: "سفارة الأردن في تونس - تونس", coords: [36.806495, 10.181532] },
-                { name: "سفارة الأردن في جنوب أفريقيا - بريتوريا", coords: [-25.747868, 28.229271] },
-                { name: "سفارة الأردن في كينيا - نيروبي", coords: [-1.286389, 36.817223] },
-                { name: "سفارة الأردن في ليبيا - طرابلس", coords: [32.887209, 13.191338] },
-                { name: "سفارة الأردن في مصر - القاهرة", coords: [30.0444196, 31.2357116] },
-                { name: "سفارة الأردن في المكسيك - مكسيكو سيتي", coords: [19.432608, -99.133209] },
-                { name: "سفارة الأردن في كندا - أوتاوا", coords: [45.42153, -75.697193] },
-                { name: "سفارة الأردن في أستراليا - كانبيرا", coords: [-35.280937, 149.130009] },
-                { name: "سفارة الأردن في البرازيل - برازيليا", coords: [-15.794229, -47.882166] },
-                { name: "سفارة الأردن في تشيلي - سانتياجو", coords: [-33.44889, -70.669265] }
-            ];
-            // إعداد أيقونة العلم الأردني
-            const jordanFlagIcon = L.icon({
-                iconUrl: './flag.png', // ضع هنا رابط العلم الأردني أو مساره المحلي
-                iconSize: [32, 32], // حجم الأيقونة
-                iconAnchor: [16, 32], // نقطة التثبيت (وسط الأيقونة)
-                popupAnchor: [0, -32] // مكان ظهور النافذة المنبثقة
-            });
-            // إضافة العلامات للخريطة
-            embassies.forEach(embassy => {
-                L.marker(embassy.coords, { icon: jordanFlagIcon }).addTo(map).bindPopup(`<b>${embassy.name}</b><br>للمزيد من التفاصيل، يرجى زيارة <a href='https://www.mfa.gov.jo/' target='_blank'>موقع وزارة الخارجية</a>.`);
-            });
-        });
-    </script>
-</head>
-
-<body>
-    <div class="container-fluid">
-    <header>
-<h1 style="font-family:conv_original-hafs,'Traditional Arabic',tahoma,serif;font-size:20px">
-    <p>
-        بِسْمِ اللَّـهِ الرَّحْمَـٰنِ الرَّحِيمِ 
-    </p>
-   <p class="h3">
-    ﴿ وَٱخۡفِضۡ لَهُمَا جَنَاحَ ٱلذُّلِّ مِنَ ٱلرَّحۡمَةِ وَقُل رَّبِّ ٱرۡحَمۡهُمَا كَمَا رَبَّيَانِي صَغِيرٗا  ﴾ [ الإسراء: 24]
-   </p>
-   <p id="sitename" class="h4">
-    الموقع الشخصي للمحامي الشرعي معتز الشريدة
-   </p>
-</h1>
-        <div class="mt-2 mb-1">
-            <!-- Swiper for news -->
-            <div class="web-breaking-widget">
-                <div class="swiper swiper-container">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <span class="bg-dark rounded-2 me-1">
-                                مستجاب
-                            </span>
-                            اللهم اجعلنا إخوةً متحابين فيك ولا تفرّقنا.
-                        </div>
-                        <div class="swiper-slide">
-                            <span class="bg-dark rounded-2 me-1">
-                                اسلام ويب
-                            </span>
-                            اللهم ألف بين قلوبنا، وأصلح ذات بيننا، واهدنا سبل السلام، ونجنا من الظلمات إلى النور، وجنبنا الفواحش ما ظهر منها وما بطن، وبارك لنا في أسماعنا، وأبصارنا، وقلوبنا، وأزواجنا، وذرياتنا، وتب علينا إنك أنت التواب الرحيم، واجعلنا شاكرين لنعمك مثنين بها عليك قابلين لها وأتممها علينا
-                        </div>
-                        <div class="swiper-slide">
-                            <span class="bg-dark rounded-2 me-1">
-                                مستجاب
-                            </span>
-                            اللهم ألِّف بين قلوبنا كما ألّفتَ بين المهاجرين والأنصار، وألّف اللهمّ بيننا وبين عبادك الصالحين.
-                        </div>
-                        <div class="swiper-slide">
-                            <span class="bg-dark rounded-2 me-1">
-                                مستجاب
-                            </span>
-                            اللهم ارزقنا الإنصاف في القول والفعل، وجنّبنا أن نؤذي فيك أحدًا.
-                        </div>
-                        <div class="swiper-slide">
-                            <span class="bg-dark rounded-2 me-1">
-                                مستجاب
-                            </span>
-                            اللهم اجعل شرعك وسنّة نبيّك الحاكم لأخلاقنا، واجمع شملنا تحت لواء لا إله إلّا الله محمّد رسول الله.
-                        </div>
-                        <div class="swiper-slide">
-                            <span class="bg-dark rounded-2 me-1">
-                                مستجاب
-                            </span>
-                            اللهم نقِّ ألسنتنا من أمراض الغيبة والنميمة تلك التي تعكر صفو محبتنا.
-                        </div>
-                        <div class="swiper-slide">
-                            <span class="bg-dark rounded-2 me-1">
-                                مستجاب
-                            </span>
-                            اللهم اجمع على الحق نفوسنا وجنّد في رضاك أرواحنا.
-                        </div>
-                        <div class="swiper-slide">
-                            <span class="bg-dark rounded-2 me-1">
-                                مستجاب
-                            </span>
-                            اللهم احفظنا بحفظك واحفظ لنا أحبتنا ولا تُرِنا فيهم بأسًا ولا ضُرًّا يا رب العالمين.
-                        </div>
-                        <div class="swiper-slide">
-                            <span class="bg-dark rounded-2 me-1">
-                                مستجاب
-                            </span>
-                            اللهم يا جواد جدّ علينا بلم شلمنا فإنّ قلوبنا من البعد اكتَوَت.
-                        </div>
-                        <div class="swiper-slide">
-                            <span class="bg-dark rounded-2 me-1">
-                                مستجاب
-                            </span>
-                            اللهم طهّر لنا قلوبنا واحفظ أحبتنا واكفِنا اللهمّ شرّ ما يخفيه عنّا الغيب.
-                        </div>
-                        <div class="swiper-slide">
-                            <span class="bg-dark rounded-2 me-1">
-                               اسلام ويب
-                            </span>
-                            وفي البخاري: أن الشيطان قال لأبي هريرة:
-                            إذا أويت إلى فراشك فاقرأ آية الكرسي، فإنه لن يزال عليك من الله حافظ، ولا يقربك شيطان حتى تصبح، ولما أخبر النبي صلى الله عليه وسلم بذلك، قال: صدقك وهو كذوب.
-                        </div>
-                    </div>
-                </div>
-            </div>
+  </head>
+  <body>
+    <!-- نافبار -->
+    <nav class="navbar navbar-expand-lg bg-light-subtle">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">معتز الشريدة</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#"
+                >الرئيسية</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">من نحن</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">الخدمات</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">اتصل بنا</a>
+            </li>
+          </ul>
         </div>
-    </header>
-    <nav>
-        <div class="row justify-content-center align-items-center">
-            <div class="col-auto">
-                <a href="index.html">الرئيسية</a>
-            </div>
-            <div class="col-auto">
-                <a href="https://api.whatsapp.com/send/?phone=962782338404&text&type=phone_number&app_absent=0" target="_blank">
-                    واتساب
-                </a>
-            </div>
-            <div class="col-auto">
-                <a id="email" href="#">اتصل بنا</a>
-            </div>
-        </div>        
+      </div>
     </nav>
-    <div class="content">
-        <div id="map" class="map"></div>
-        <p class="text-muted fs-6">خارطة سفارات المملكة الأردنية الهاشمية حول العالم نقلاً عن الموقع الرسمي لوزارة
-            الخارجية وشؤون المغتربين</p>
-    </div>
-    <footer>
-        <p>للمزيد من المعلومات، تفضل بزيارة <a href="https://mws.per.jo" target="_blank">الموقع الشخصي</a>.</p>
-    </footer>
-</div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"
-        integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-        var swiper = new Swiper('.swiper-container', {
-            autoplay: {
-                delay: 10000,
-                disableOnInteraction: false,
-            },
-            loop: true,
-        });
-    </script>
-    <script>
-        function protectEmail() {
-            const user = "cs";
-            const domain = "mws.per.jo";
-            document.getElementById("email").innerHTML = `<a href="mailto:${user}@${domain}" style="color: #1abc9c;">اتصل بنا</a>`;
-        }
-    
-        // استدعاء الدالة عند تحميل الصفحة
-        window.onload = protectEmail;
-    </script>
-</body>
+    <!-- نافبار -->
+    <!-- اية كريمة -->
+    <section class="container">
+      <div class="text-center pe-5 ps-5 py-3 px-3">
+        <div class="fs-sm-6">بِسْمِ اللَّـهِ الرَّحْمَـٰنِ الرَّحِيمِ</div>
+        <div class="fs-sm-6">
+          ﴿ وَقُل رَّبِّ ٱرۡحَمۡهُمَا كَمَا رَبَّيَانِي صَغِيرٗا ﴾
+        </div>
 
+        <div class="fs-sm-6 text-primary-emphasis">
+          المحامي الشرعي معتز الشريدة
+        </div>
+      </div>
+    </section>
+    <!-- اية كريمة -->
+    <!-- شرائح متنقله -->
+    <section class="container py-3 px-2">
+      <div class="mt-2 mb-1">
+        <!-- Swiper for news -->
+        <div class="web-breaking-widget">
+          <div class="swiper swiper-container">
+            <div class="swiper-wrapper">
+              <!-- سلايد -->
+              <div
+                class="swiper-slide p-1 rounded-2 border-end border-3 border-dark"
+              >
+                <span class="badge bg-dark-subtle ms-2">
+                   مستجاب 
+                  </span>
+                <span class="br_sr_name fw-normal text-dark-emphasis">
+                  اللهم اجعلنا إخوةً متحابين فيك ولا تفرّقنا.
+                </span>
+              </div>
+              <!-- سلايد -->
+              <div
+                class="swiper-slide p-1 rounded-2 border-end border-3 border-dark"
+              >
+                <span class="badge bg-dark-subtle ms-2">
+                   مستجاب 
+                  </span>
+                <span class="br_sr_name fw-normal text-dark-emphasis">
+                  اللهم ألِّف بين قلوبنا كما ألّفتَ بين المهاجرين والأنصار، وألّف اللهمّ بيننا وبين عبادك الصالحين.
+                </span>
+              </div>
+               <!-- سلايد -->
+               <div
+               class="swiper-slide p-1 rounded-2 border-end border-3 border-dark"
+             >
+               <span class="badge bg-dark-subtle ms-2">
+                  مستجاب 
+                 </span>
+               <span class="br_sr_name fw-normal text-dark-emphasis">
+                اللهم ارزقنا الإنصاف في القول والفعل، وجنّبنا أن نؤذي فيك أحدًا.
+               </span>
+             </div>
+             <!-- سلايد -->
+              <!-- سلايد -->
+              <div
+              class="swiper-slide p-1 rounded-2 border-end border-3 border-dark"
+            >
+              <span class="badge bg-dark-subtle ms-2">
+                 مستجاب 
+                </span>
+              <span class="br_sr_name fw-normal text-dark-emphasis">
+                اللهم نقِّ ألسنتنا من أمراض الغيبة والنميمة تلك التي تعكر صفو محبتنا.
+              </span>
+            </div>
+            <!-- سلايد -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- شرائح متنقله -->
+    <!-- الخريطة -->
+    <section class="bg-body-secondary">
+      <div class="container">
+        <div class="content">
+          <p class="text-muted fs-6">
+            خارطة سفارات المملكة الأردنية الهاشمية حول العالم نقلاً عن الموقع
+            الرسمي لوزارة الخارجية وشؤون المغتربين
+          </p>
+          <div id="map" class="map"></div>
+        </div>
+      </div>
+    </section>
+    <!-- الخريطة -->
+    <!-- https://undraw.co/illustrations -->
+    <section class="container text-center p-5">
+      <div class="container">
+        <div class="d-sm-flex align-items-center">
+          <div class="py-3">
+            <h1>من نحن</h1>
+            <p>
+              المحامي الشرعي معتز الشريدة هو محامٍ متخصص في قضايا الأسرة في
+              الأردن، بما في ذلك الزواج، والطلاق، والمهر، والإرث. يُقدم استشارات
+              قانونية ويُعالج القضايا المتعلقة بالأحوال الشخصية. يُشارك في
+              مجموعات قانونية على فيسبوك، حيث يُقدم النصائح والإرشادات للأفراد
+              حول المسائل الشرعية.
+            </p>
+          </div>
+          <img
+            src="./img/logo.png"
+            alt="Your Alt Text"
+            width="100%"
+            height="100%"
+            class="img-fluid w-25"
+          />
+        </div>
+      </div>
+    </section>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"
+      integrity="sha512-Ysw1DcK1P+uYLqprEAzNQJP+J4hTx4t/3X2nbVwszao8wD+9afLjBQYjz7Uk4ADP+Er++mJoScI42ueGtQOzEA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/sw.js")
+          .then(() => console.log("Service Worker Registered"))
+          .catch((error) =>
+            console.log("Service Worker Registration Failed:", error)
+          );
+      }
+    </script>
+    <script>
+      var swiper = new Swiper(".swiper-container", {
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false,
+        },
+        loop: true,
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const map = L.map("map").setView([31.963158, 35.930359], 2); // موقع الأردن كبداية
+
+        // إضافة طبقة الخريطة
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 18,
+        }).addTo(map);
+
+        // بيانات السفارات الأردنية
+        const embassies = [
+          {
+            name: "سفارة الأردن في أذربيجان - باكو",
+            coords: [40.409262, 49.867092],
+          },
+          {
+            name: "سفارة الأردن في أندونيسيا - جاكرتا",
+            coords: [-6.208763, 106.845599],
+          },
+          {
+            name: "سفارة الأردن في أوزباكستان - طشقند",
+            coords: [41.299496, 69.240073],
+          },
+          {
+            name: "سفارة الأردن في إيران - طهران",
+            coords: [35.689198, 51.388974],
+          },
+          {
+            name: "سفارة الأردن في الإمارات العربية المتحدة - أبو ظبي",
+            coords: [24.453884, 54.3773438],
+          },
+          {
+            name: "قنصلية الأردن في الإمارات العربية المتحدة - دبي",
+            coords: [25.276987, 55.296249],
+          },
+          {
+            name: "سفارة الأردن في البحرين - المنامة",
+            coords: [26.223504, 50.587836],
+          },
+          {
+            name: "قنصلية الأردن في العراق - أربيل",
+            coords: [36.191113, 44.009167],
+          },
+          {
+            name: "سفارة الأردن في العراق - بغداد",
+            coords: [33.315241, 44.366066],
+          },
+          {
+            name: "سفارة الأردن في الكويت - الكويت",
+            coords: [29.375859, 47.977405],
+          },
+          {
+            name: "سفارة الأردن في السعودية - الرياض",
+            coords: [24.713552, 46.675297],
+          },
+          {
+            name: "قنصلية الأردن في السعودية - جدة",
+            coords: [21.485811, 39.192505],
+          },
+          {
+            name: "سفارة الأردن في الهند - نيودلهي",
+            coords: [28.613939, 77.209023],
+          },
+          {
+            name: "سفارة الأردن في اليابان - طوكيو",
+            coords: [35.689487, 139.691711],
+          },
+          {
+            name: "سفارة الأردن في اليمن - صنعاء",
+            coords: [15.369445, 44.191007],
+          },
+          {
+            name: "سفارة الأردن في باكستان - إسلام آباد",
+            coords: [33.68442, 73.047884],
+          },
+          {
+            name: "سفارة الأردن في تركيا - أنقرة",
+            coords: [39.92077, 32.85411],
+          },
+          {
+            name: "سفارة الأردن في الصين - بكين",
+            coords: [39.9042, 116.407396],
+          },
+          {
+            name: "سفارة الأردن في سنغافورة - سنغافورة",
+            coords: [1.352083, 103.819836],
+          },
+          {
+            name: "سفارة الأردن في سوريا - دمشق",
+            coords: [33.513807, 36.276528],
+          },
+          {
+            name: "سفارة الأردن في عُمان - مسقط",
+            coords: [23.58589, 58.405922],
+          },
+          {
+            name: "سفارة الأردن في قطر - الدوحة",
+            coords: [25.276987, 51.520008],
+          },
+          {
+            name: "سفارة الأردن في كازاخستان - أستانا",
+            coords: [51.169392, 71.449074],
+          },
+          {
+            name: "سفارة الأردن في كوريا الجنوبية - سيؤول",
+            coords: [37.566535, 126.977969],
+          },
+          {
+            name: "سفارة الأردن في لبنان - بيروت",
+            coords: [33.893791, 35.501776],
+          },
+          {
+            name: "سفارة الأردن في ماليزيا - كوالالمبور",
+            coords: [3.139003, 101.686855],
+          },
+          {
+            name: "سفارة الأردن في إسبانيا - مدريد",
+            coords: [40.416775, -3.70379],
+          },
+          {
+            name: "سفارة الأردن في ألمانيا - برلين",
+            coords: [52.520007, 13.404954],
+          },
+          {
+            name: "سفارة الأردن في إيطاليا - روما",
+            coords: [41.902784, 12.496366],
+          },
+          {
+            name: "سفارة الأردن في المملكة المتحدة - لندن",
+            coords: [51.507351, -0.127758],
+          },
+          {
+            name: "سفارة الأردن في النرويج - أوسلو",
+            coords: [59.913869, 10.752245],
+          },
+          {
+            name: "سفارة الأردن في النمسا - فيينا",
+            coords: [48.208174, 16.373819],
+          },
+          {
+            name: "سفارة الأردن في اليونان - أثينا",
+            coords: [37.98381, 23.727539],
+          },
+          {
+            name: "سفارة الأردن في بلجيكا - بروكسل",
+            coords: [50.850346, 4.351721],
+          },
+          {
+            name: "سفارة الأردن في روسيا - موسكو",
+            coords: [55.755826, 37.6173],
+          },
+          {
+            name: "سفارة الأردن في رومانيا - بخارست",
+            coords: [44.426767, 26.102538],
+          },
+          {
+            name: "سفارة الأردن في سويسرا - بيرن",
+            coords: [46.94809, 7.44744],
+          },
+          {
+            name: "سفارة الأردن في فرنسا - باريس",
+            coords: [48.856614, 2.3522219],
+          },
+          {
+            name: "سفارة الأردن في قبرص - نيقوسيا",
+            coords: [35.185566, 33.382276],
+          },
+          {
+            name: "سفارة الأردن في هولندا - لاهاي",
+            coords: [52.070498, 4.3007],
+          },
+          {
+            name: "سفارة الأردن في أثيوبيا - أديس أبابا",
+            coords: [9.145, 40.489673],
+          },
+          {
+            name: "سفارة الأردن في الجزائر - الجزائر",
+            coords: [36.737232, 3.086472],
+          },
+          {
+            name: "سفارة الأردن في السودان - الخرطوم",
+            coords: [15.500654, 32.559899],
+          },
+          {
+            name: "سفارة الأردن في المغرب - الرباط",
+            coords: [34.020882, -6.84165],
+          },
+          {
+            name: "سفارة الأردن في تونس - تونس",
+            coords: [36.806495, 10.181532],
+          },
+          {
+            name: "سفارة الأردن في جنوب أفريقيا - بريتوريا",
+            coords: [-25.747868, 28.229271],
+          },
+          {
+            name: "سفارة الأردن في كينيا - نيروبي",
+            coords: [-1.286389, 36.817223],
+          },
+          {
+            name: "سفارة الأردن في ليبيا - طرابلس",
+            coords: [32.887209, 13.191338],
+          },
+          {
+            name: "سفارة الأردن في مصر - القاهرة",
+            coords: [30.0444196, 31.2357116],
+          },
+          {
+            name: "سفارة الأردن في المكسيك - مكسيكو سيتي",
+            coords: [19.432608, -99.133209],
+          },
+          {
+            name: "سفارة الأردن في كندا - أوتاوا",
+            coords: [45.42153, -75.697193],
+          },
+          {
+            name: "سفارة الأردن في أستراليا - كانبيرا",
+            coords: [-35.280937, 149.130009],
+          },
+          {
+            name: "سفارة الأردن في البرازيل - برازيليا",
+            coords: [-15.794229, -47.882166],
+          },
+          {
+            name: "سفارة الأردن في تشيلي - سانتياجو",
+            coords: [-33.44889, -70.669265],
+          },
+        ];
+        // إعداد أيقونة العلم الأردني
+        const jordanFlagIcon = L.icon({
+          iconUrl: "./img/flag.png", // ضع هنا رابط العلم الأردني أو مساره المحلي
+          iconSize: [32, 32], // حجم الأيقونة
+          iconAnchor: [16, 32], // نقطة التثبيت (وسط الأيقونة)
+          popupAnchor: [0, -32], // مكان ظهور النافذة المنبثقة
+        });
+        // إضافة العلامات للخريطة
+        embassies.forEach((embassy) => {
+          L.marker(embassy.coords, { icon: jordanFlagIcon })
+            .addTo(map)
+            .bindPopup(
+              `<b>${embassy.name}</b><br>للمزيد من التفاصيل، يرجى زيارة <a href='https://www.mfa.gov.jo/' target='_blank'>موقع وزارة الخارجية</a>.`
+            );
+        });
+      });
+    </script>
+  </body>
 </html>
